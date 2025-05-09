@@ -4,7 +4,15 @@ const connection = require('../data/db.js');
 // index
 function index(req, res) {
 
-    const sql = 'SELECT * FROM movies';
+    const sql = `
+    SELECT 
+       movies.*, AVG(reviews.vote) AS vote_average
+    FROM 
+       movies
+    LEFT JOIN 
+       reviews ON movies.id = reviews.movie_id
+    GROUP BY 
+       movies.id`;
 
     connection.query(sql, (err, results) => {
         if (err) return res.status(500).json({ error: 'Database connection failed' });
