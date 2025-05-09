@@ -7,8 +7,12 @@ function index(req, res) {
     const sql = 'SELECT * FROM movies';
 
     connection.query(sql, (err, results) => {
-        if (err) return res.status(500).json({ error: 'Database connection failed' })
-        res.json(results);
+        if (err) return res.status(500).json({ error: 'Database connection failed' });
+
+        res.json(results.map(result => ({
+            ...result,
+            image: process.env.PUBLIC_PATH + 'movies-img/' + result.image
+        })))
 
     })
 }
@@ -16,10 +20,8 @@ function index(req, res) {
 // show
 function show(req, res) {
 
-    // recuperare id
     const id = parseInt(req.params.id);
 
-    // salvare in una variabile la query da utilizzare
     const sql = 'SELECT * FROM movies WHERE id = ?';
 
     connection.query(sql, [id], (err, results) => {
@@ -27,7 +29,10 @@ function show(req, res) {
         if (err) return res.status(500).json({ error: 'Database connection failed' });
         if (results.length === 0) return res.status(404).json({ error: 'Movie not found' });
 
-        const movie = results[0];
+        const movie = {
+            ...results[0],
+            image: process.env.PUBLIC_PATH + 'movies-img/' + results[0].image
+        }
 
         // reviews
         const sql = 'SELECT * FROM db_movies.reviews WHERE movie_id = ?';
