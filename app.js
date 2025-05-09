@@ -3,6 +3,9 @@ const express = require('express');
 const app = express();
 const port = process.env.PORT;
 
+// registrazione body-parser => decodificare il body per far sì che venga letto
+app.use(express.json()); // in formato json
+
 // routers
 const moviesRouter = require('./routers/movies.js');
 
