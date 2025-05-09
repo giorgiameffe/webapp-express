@@ -1,3 +1,6 @@
+// my sql
+const connection = require('../data/db.js');
+
 // index
 function index(req, res) {
     res.send('Show all movies');
