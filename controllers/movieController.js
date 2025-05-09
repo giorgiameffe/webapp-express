@@ -35,7 +35,7 @@ function show(req, res) {
         }
 
         // reviews
-        const sql = 'SELECT * FROM db_movies.reviews WHERE movie_id = ?';
+        const sql = 'SELECT * FROM reviews WHERE movie_id = ?';
 
         connection.query(sql, [id], (err, results) => {
 
