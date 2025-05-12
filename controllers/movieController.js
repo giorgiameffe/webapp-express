@@ -19,7 +19,7 @@ function index(req, res) {
 
         res.json(results.map(result => ({
             ...result,
-            image: process.env.PUBLIC_PATH + 'movies-img/' + result.image
+            imagePath: process.env.PUBLIC_PATH + 'movies-img/' + result.image
         })))
 
     })
