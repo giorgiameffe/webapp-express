@@ -4,17 +4,25 @@ const connection = require('../data/db.js');
 // index
 function index(req, res) {
 
-    const sql = `
+    const { search } = req.query;
+
+    let sql = `
     SELECT 
-       movies.*, AVG(reviews.vote) AS vote_average
+       movies.*, ROUND(AVG(reviews.vote), 2) AS reviews_vote
     FROM 
        movies
     LEFT JOIN 
        reviews ON movies.id = reviews.movie_id
-    GROUP BY 
-       movies.id`;
+    `;
 
-    connection.query(sql, (err, results) => {
+    if (search) {
+
+        sql += `WHERE title LIKE "%${search}%" OR director LIKE "%${search}%"  OR abstract  LIKE "%${search}%"`
+    }
+
+    sql += 'GROUP BY movies.id'
+
+    connection.query(sql, [search, search, search], (err, results) => {
         if (err) return res.status(500).json({ error: 'Database connection failed' });
 
         res.json(results.map(result => ({
