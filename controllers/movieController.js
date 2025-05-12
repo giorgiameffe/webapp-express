@@ -28,7 +28,7 @@ function index(req, res) {
 // show
 function show(req, res) {
 
-    const id = parseInt(req.params.id);
+    const { id } = req.params;
 
     const sql = 'SELECT * FROM movies WHERE id = ?';
 
@@ -47,7 +47,10 @@ function show(req, res) {
 
         connection.query(sql, [id], (err, results) => {
 
-            if (err) return res.status(500).json({ error: 'Database connection failed' });
+            if (err) {
+                console.log(err);
+            }
+
             movie.reviews = results;
             res.json(movie);
         })
