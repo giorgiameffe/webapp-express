@@ -6,6 +6,8 @@ function index(req, res) {
 
     const { search } = req.query;
 
+    const preparedParams = [];
+
     let sql = `
     SELECT 
        movies.*, ROUND(AVG(reviews.vote), 2) AS reviews_vote
@@ -17,12 +19,13 @@ function index(req, res) {
 
     if (search) {
 
-        sql += `WHERE title LIKE "%${search}%" OR director LIKE "%${search}%"  OR abstract  LIKE "%${search}%"`
+        sql += `WHERE title LIKE "%${search}%" OR director LIKE "%${search}%"  OR abstract  LIKE "%${search}%"`;
+        preparedParams.push(`%${search}%`, `%${search}%`, `%${search}%`);
     }
 
     sql += 'GROUP BY movies.id'
 
-    connection.query(sql, [search, search, search], (err, results) => {
+    connection.query(sql, preparedParams, (err, results) => {
         if (err) return res.status(500).json({ error: 'Database connection failed' });
 
         res.json(results.map(result => ({
