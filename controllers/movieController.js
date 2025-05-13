@@ -78,7 +78,17 @@ function show(req, res) {
 
 }
 
+function storeReview(req, res) {
+
+    const { id } = req.params;
+
+    console.log(req.body);
+
+    res.send(`Ho aggiunto una nuova recensione per il film ${id}`);
+}
+
 module.exports = {
     index,
-    show
+    show,
+    storeReview
 }
