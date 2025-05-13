@@ -19,7 +19,7 @@ function index(req, res) {
 
     if (search) {
 
-        sql += `WHERE title LIKE "%${search}%" OR director LIKE "%${search}%"  OR abstract  LIKE "%${search}%"`;
+        sql += `WHERE title LIKE ? OR director LIKE ?  OR abstract  LIKE ?`;
         preparedParams.push(`%${search}%`, `%${search}%`, `%${search}%`);
     }
 
