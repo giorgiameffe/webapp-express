@@ -1,4 +1,5 @@
 const multer = require('multer');
+const slugify = require('slugify');
 
 const storage = multer.diskStorage({
     // funzione che indica dove verrà salvato il file
@@ -9,7 +10,13 @@ const storage = multer.diskStorage({
     filename: function (req, file, cb) {
         // viene assegnato all'immagine un valore numerico per evitare che le immagini
         // abbiano lo stesso nome
-        const uniqueName = `${Date.now()} - ${Math.round(Math.random() * 1E9)} - ${file.originalname}`;
+        const slugifiedName = slugify(file.originalname, {
+
+            lower: true,
+            trim: true
+        });
+
+        const uniqueName = `${Date.now()} - ${Math.round(Math.random() * 1E9)} - ${slugifiedName}`;
         cb(null, uniqueName);
     }
 
