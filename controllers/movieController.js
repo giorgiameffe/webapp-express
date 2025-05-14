@@ -26,7 +26,7 @@ function index(req, res) {
     sql += 'GROUP BY movies.id'
 
     connection.query(sql, preparedParams, (err, results) => {
-        if (err) return res.status(500).json({ error: 'Database connection failed' });
+        if (err) return res.status(500).json({ errorMessage: err.sqlMessage });
 
         res.json(results.map(result => ({
             ...result,
@@ -54,12 +54,12 @@ function show(req, res) {
 
     connection.query(sql, [id], (err, results) => {
 
-        if (err) return res.status(500).json({ error: 'Database connection failed' });
+        if (err) return res.status(500).json({ errorMessage: err.sqlMessage });
         if (results.length === 0) return res.status(404).json({ error: 'Movie not found' });
 
         const movie = {
             ...results[0],
-            image: process.env.PUBLIC_PATH + 'movies-img/' + results[0].image
+            imagePath: process.env.PUBLIC_PATH + 'movies-img/' + results[0].image
         }
 
         // reviews
@@ -82,9 +82,24 @@ function storeReview(req, res) {
 
     const { id } = req.params;
 
-    console.log(req.body);
+    const { name, vote, text } = req.body;
 
-    res.send(`Ho aggiunto una nuova recensione per il film ${id}`);
+    const sql = `
+    INSERT INTO reviews (movie_id, name, vote, text)
+    VALUES (?, ?, ? ,?)`;
+
+    connection.query(sql, [id, name, vote, text], (err, results) => {
+
+        if (err) return res.status(500).json({ errorMessage: err.sqlMessage });
+
+    })
+
+    res.status(201).json({
+        id,
+        name,
+        vote,
+        text
+    })
 }
 
 module.exports = {
