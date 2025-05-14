@@ -36,7 +36,7 @@ function index(req, res) {
     })
 }
 
-// show
+// show 
 function show(req, res) {
 
     const { id } = req.params;
@@ -78,6 +78,7 @@ function show(req, res) {
 
 }
 
+// aggiungere nuova recensione
 function storeReview(req, res) {
 
     const { id } = req.params;
@@ -102,8 +103,32 @@ function storeReview(req, res) {
     })
 }
 
+// aggiungere nuovo film
+function store(req, res) {
+
+    res.send('Add new movie');
+
+    const { title, director, abstract } = req.body;
+
+    const sql = `
+    INSERT INTO movies (title, director, abstract)
+    VALUES (?, ?, ?)`;
+
+    connection.query(sql, [title, director, abstract], (err, results) => {
+
+        if (err) return res.status(500).json({ errorMessage: err.sqlMessage });
+
+    })
+
+    res.status(201).json({
+        message: 'Add a new movie'
+    })
+
+}
+
 module.exports = {
     index,
     show,
-    storeReview
+    storeReview,
+    store
 }
