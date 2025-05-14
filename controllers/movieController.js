@@ -104,17 +104,19 @@ function storeReview(req, res) {
 }
 
 // aggiungere nuovo film
-function store(req, res) {
-
-    res.send('Add new movie');
+function storeMovie(req, res) {
 
     const { title, director, abstract } = req.body;
 
-    const sql = `
-    INSERT INTO movies (title, director, abstract)
-    VALUES (?, ?, ?)`;
+    const imageName = req.file.filename;
 
-    connection.query(sql, [title, director, abstract], (err, results) => {
+    console.log(imageName);
+
+    const sql = `
+    INSERT INTO movies (title, director, abstract, image)
+    VALUES (?, ?, ?, ?)`;
+
+    connection.query(sql, [title, director, abstract, imageName], (err, results) => {
 
         if (err) return res.status(500).json({ errorMessage: err.sqlMessage });
 
@@ -130,5 +132,5 @@ module.exports = {
     index,
     show,
     storeReview,
-    store
+    storeMovie
 }
