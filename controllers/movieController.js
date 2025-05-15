@@ -50,23 +50,33 @@ function show(req, res) {
     LEFT JOIN 
        reviews ON movies.id = reviews.movie_id
     WHERE 
-       movies.id = ?
+       movies.slug = ?
     `;
 
     connection.query(sql, [id], (err, results) => {
 
         if (err) return res.status(500).json({ errorMessage: err.sqlMessage });
-        if (results.length === 0) return res.status(404).json({ error: 'Movie not found' });
+
+        if (results.length === 0 || results[0]?.id === null) {
+
+            return res.status(404).json({
+                errorMessage: 'Movie not found',
+                id
+            })
+
+        }
+
+        const currentResult = results[0];
 
         const movie = {
-            ...results[0],
+            ...currentResult,
             imagePath: process.env.PUBLIC_PATH + 'movies-img/' + results[0].image
         }
 
         // reviews
         const sql = 'SELECT * FROM reviews WHERE movie_id = ?';
 
-        connection.query(sql, [id], (err, results) => {
+        connection.query(sql, [currentResult.id], (err, results) => {
 
             if (err) {
                 console.log(err);
