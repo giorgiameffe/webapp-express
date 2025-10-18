@@ -116,30 +116,33 @@ function storeReview(req, res) {
 
 // aggiungere nuovo film
 function storeMovie(req, res) {
-
     const { title, director, abstract } = req.body;
 
-    const imageName = req.file.filename;
+    // Controlla che multer abbia salvato l'immagine
+    if (!req.file) {
+        return res.status(400).json({ errorMessage: "Image file is required" });
+    }
 
-    const sql = `
-    INSERT INTO movies (title, director, abstract, image, slug)
-    VALUES (?, ?, ?, ?, ?)`;
+    const imageName = req.file.filename;
 
     const slug = slugify(title, {
         lower: true,
         trim: true
-    })
+    });
+
+    const sql = `
+        INSERT INTO movies (title, director, abstract, image, slug)
+        VALUES (?, ?, ?, ?, ?)
+    `;
 
     connection.query(sql, [title, director, abstract, imageName, slug], (err, results) => {
-
         if (err) return res.status(500).json({ errorMessage: err.sqlMessage });
 
-    })
-
-    res.status(201).json({
-        message: 'Add a new movie'
-    })
-
+        res.status(201).json({
+            message: 'Movie added successfully',
+            id: results.insertId
+        });
+    });
 }
 
 module.exports = {
