@@ -40,7 +40,7 @@ function index(req, res) {
 // show 
 function show(req, res) {
 
-    const { id } = req.params;
+    const { slug } = req.params;
 
     const sql =
         `SELECT 
@@ -53,7 +53,7 @@ function show(req, res) {
        movies.slug = ?
     `;
 
-    connection.query(sql, [id], (err, results) => {
+    connection.query(sql, [slug], (err, results) => {
 
         if (err) return res.status(500).json({ errorMessage: err.sqlMessage });
 
@@ -92,31 +92,39 @@ function show(req, res) {
 // aggiungere nuova recensione
 function storeReview(req, res) {
 
-    const { id } = req.params;
-
+    const { slug } = req.params;
     const { name, vote, text } = req.body;
 
-    const sql = `
-    INSERT INTO reviews (movie_id, name, vote, text)
-    VALUES (?, ?, ? ,?)`;
-
-    connection.query(sql, [id, name, vote, text], (err, results) => {
+    // prima prendo l'id numerico dal film
+    connection.query('SELECT id FROM movies WHERE slug = ?', [slug], (err, results) => {
 
         if (err) return res.status(500).json({ errorMessage: err.sqlMessage });
+        if (results.length === 0) return res.status(404).json({ errorMessage: 'Movie not found' });
 
-    })
+        const movieIdNumeric = results[0].id;
 
-    res.status(201).json({
-        id,
-        name,
-        vote,
-        text
-    })
+        // poi inserisco la recensione
+        connection.query('INSERT INTO reviews (movie_id, name, vote, text) VALUES (?, ?, ?, ?)',
+            [movieIdNumeric, name, vote, text],
+            (err, results) => {
+                if (err) return res.status(500).json({ errorMessage: err.sqlMessage });
+
+                res.status(201).json({
+                    id: results.insertId,
+                    name,
+                    vote,
+                    text
+                });
+            }
+        );
+    });
 }
+
 
 // aggiungere nuovo film
 function storeMovie(req, res) {
-    const { title, director, abstract } = req.body;
+
+    const { title, director, abstract, release_year } = req.body;
 
     // Controlla che multer abbia salvato l'immagine
     if (!req.file) {
@@ -131,11 +139,11 @@ function storeMovie(req, res) {
     });
 
     const sql = `
-        INSERT INTO movies (title, director, abstract, image, slug)
-        VALUES (?, ?, ?, ?, ?)
+        INSERT INTO movies (title, director, abstract, release_year, image, slug)
+        VALUES (?, ?, ?, ?, ?, ?)
     `;
 
-    connection.query(sql, [title, director, abstract, imageName, slug], (err, results) => {
+    connection.query(sql, [title, director, abstract, release_year, imageName, slug], (err, results) => {
         if (err) return res.status(500).json({ errorMessage: err.sqlMessage });
 
         res.status(201).json({

@@ -10,12 +10,12 @@ const movieController = require('../controllers/movieController.js');
 router.get('/', movieController.index);
 
 // show
-router.get('/:id', movieController.show);
+router.get('/:slug', movieController.show);
 
 // store per nuovo libro
 router.post('/', upload.single('image'), movieController.storeMovie)
 
 // store per nuova recensione
-router.post('/:id/reviews', movieController.storeReview);
+router.post('/:slug/reviews', movieController.storeReview);
 
 module.exports = router;
