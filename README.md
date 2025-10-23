@@ -1,49 +1,110 @@
-# Setup Web App Express-Day One
+# 🎬 Cine Circle – Backend (`webapp-express`)
 
-E' ora di mettere alla prova le vostre conoscenze iniziando a costruire la vostra prima app completa!
-
-Ecco i primi step:
-
-- Utilizzando il file in allegato, creiamo un database con MySQL Workbench;
-- Creiamo una nuova applicazione Express;
-- Colleghiamo l’app al db e verifichiamo che tutto funzioni;
-- Prepariamo una rotta index per ottenere la lista dei film;
-- Prepariamo una rotta show per ottenere i dettagli di un singolo film e le sue recensioni.
-
-### Bonus
-
-- Inserire delle immagini nel progetto express e dunque nel db;
-- Inserire i dati di connessione al database come variabili d’ambiente;
-- Inserire le vostre API in controller;
-- Inserire le vostre rotte in un router;
-- Inserire un middleware per le rotte inesistenti;
-- Inserire un middleware per la gestione errori.
-
-### Bonus Bonus
-
-Restituire nella INDEX anche la media delle recensioni dei vostri film.
+Backend del progetto **Cine Circle**, un blog dedicato al mondo del cinema realizzato con un’estetica vintage per valorizzare l’atmosfera classica della settima arte.        
+Questa repository contiene la parte server-side dell’applicazione, sviluppata con **Express** e **MySQL**, che gestisce i dati e fornisce API RESTful al frontend (realizzato in React).
 
 ---
 
-Essendo un progetto sviluppato sia lato front-end che back-end, il **Day Two** e il **Day Three** vengono illustrati nel README della repository `webapp-react`.
+## 🧩 Stack Tecnologico
+
+- **Node.js**
+- **Express.js**
+- **MySQL**
+- **dotenv** → gestione delle variabili d’ambiente
+- **cors** → comunicazione sicura con il frontend
+- **multer** → gestione upload immagini
 
 ---
 
-# Setup Web App Express-Day Four
+## 🏗️ Struttura del Progetto
 
-## Consegna
-
-## MILESTONE 1 (BACKEND)
-
-- Predisponiamo un’API per salvare nel database una nuova recensione legata ad un film;
-- Testiamola su postman e verifichiamo che nel DB venga effettivamente inserita una nuova recensione.
-
-# Bonus
-
-Provate a creare un nuovo film con upload immagine (multer)!
-
-Per la **MILESTONE 2(FRONTEND)** vi rimando al README della repositoy `webapp-react`.
+```bash
+webapp-express/
+│
+├── app.js                       # File principale del server Express
+├── data/
+│   └── db.js                    # Connessione al database MySQL
+├── routers/
+│   └── movies.js                # Rotte per film e recensioni
+├── controllers/
+│   └── movieController.js       # Logica CRUD per film e recensioni
+├── middlewares/
+│   ├── notFound.js              # Middleware 404
+│   ├── handleErrors.js          # Middleware gestione errori
+│   └── multer.js                # Middleware per upload immagini
+├── public/                      # Cartella per immagini caricate
+├── .env.example                 # Esempio di configurazione ambiente
+├── package.json
+├── package-lock.json
+└── README.md
+```
 
 ---
 
-Per il **Day Five** vi rimando al README della repository `webapp-react`.
+## ⚙️ Setup del Progetto
+
+1️⃣ **Clona la repository**
+``` bash
+git clone https://github.com/giorgiameffe/webapp-express.git
+cd webapp-express
+```
+
+2️⃣ **Installa le dipendenze**
+``` bash
+npm install
+```
+
+3️⃣ **Configura le variabili d’ambiente**
+
+Copia `.env.example` in un file `.env` locale e aggiorna i valori come necessario.
+
+🔒 Solo il file .env.example è incluso nella repository; il file reale .env rimane privato e non tracciato.
+
+4️⃣ **Avvio del server**
+``` bash
+npm run dev
+```
+
+Il server sarà disponibile su `http://localhost:PORT` (dove PORT è impostato nel tuo .env).
+
+💡 Il comando npm run dev utilizza:
+```bash
+node --env-file=.env --watch app.js
+```
+Questo comando serve per caricare automaticamente le variabili dal .env e ricaricare il server ad ogni modifica dei file.
+
+---
+
+## 🧠 Funzionalità principali
+
+- API RESTful per gestire film e recensioni
+- Operazioni CRUD per i film e aggiunta di recensioni
+- Upload immagini dei film tramite middleware multer
+- Middleware per gestione CORS verso il frontend
+- Middleware personalizzati per gestione degli errori e 404
+- Connessione dinamica al database MySQL
+- Struttura modulare e scalabile
+
+---
+
+## 🔗 Rotte principali
+
+| Metodo | Endpoint                | Parametro | Descrizione                                                   |
+| ------ | ----------------------- | --------- | ------------------------------------------------------------- |
+| GET    | `/movies/`              | —         | Lista tutti i film. Supporta filtro `search`.                 |
+| GET    | `/movies/:slug`         | `slug`    | Mostra i dettagli di un singolo film, incluse le recensioni.  |
+| POST   | `/movies/`              | —         | Crea un nuovo film (upload immagine incluso).                 |
+| POST   | `/movies/:slug/reviews` | `slug`    | Aggiunge una nuova recensione al film specificato dallo slug. |
+
+---
+
+## 🧰 Script disponibili
+
+| Comando       | Descrizione                                                                   |
+| ------------- | ----------------------------------------------------------------------------- |
+| `npm run dev` | Avvia il server in modalità sviluppo con ricaricamento automatico (`--watch`) |
+
+---
+
+Questo backend fornisce tutte le API necessarie per il progetto **Cine Circle**.  
+Per un’esperienza completa, consulta e collega il **frontend React** (`webapp-react`) del progetto: [Cine Circle Frontend](https://github.com/giorgiameffe/webapp-react).
