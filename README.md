@@ -1,6 +1,6 @@
 # 🎬 Cine Circle – Backend (`webapp-express`)
-
-Backend del progetto **Cine Circle**, un blog dedicato al mondo del cinema realizzato con un’estetica vintage per valorizzare l’atmosfera classica della settima arte.        
+> Backend del progetto Cine Circle, un blog dedicato al cinema con estetica vintage.
+    
 Questa repository contiene la parte server-side dell’applicazione, sviluppata con **Express** e **MySQL**, che gestisce i dati e fornisce API RESTful al frontend (realizzato in React).
 
 ---
@@ -65,7 +65,7 @@ Copia `.env.example` in un file `.env` locale e aggiorna i valori come necessari
 npm run dev
 ```
 
-Il server sarà disponibile su `http://localhost:PORT` (dove PORT è impostato nel tuo .env).
+Il server sarà disponibile su `http://localhost:3000` (o sulla porta definita nel tuo .env).
 
 💡 Il comando npm run dev utilizza:
 ```bash
@@ -108,3 +108,9 @@ Questo comando serve per caricare automaticamente le variabili dal .env e ricari
 
 Questo backend fornisce tutte le API necessarie per il progetto **Cine Circle**.  
 Per un’esperienza completa, consulta e collega il **frontend React** (`webapp-react`) del progetto: [Cine Circle Frontend](https://github.com/giorgiameffe/webapp-react).
+
+---
+
+## 👩‍💻 Autore
+**Giorgia Meffe**  
+Progetto personale realizzato con Express.
